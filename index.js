@@ -16,7 +16,7 @@ const app = express();
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: process.env.CLIENT_ORIGIN, credentials: true }));
+app.use(cors({ origin: 'https://project-eta-mocha-53.vercel.app', credentials: true }));
 app.use(generalLimiter);
 
 app.get("/",(req,res)=>{

@@ -5,7 +5,7 @@ dotenv.config();
 
 export const connectDB = async () => {
   const uri = process.env.MONGODB_URI; // ✅ use the env variable directly
-  console.log("uri: ",uri)
+  //console.log("uri: ",uri)
   if (!uri) throw new Error('MONGODB_URI missing');
 
   mongoose.set('strictQuery', true);

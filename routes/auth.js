@@ -92,9 +92,9 @@ router.post('/verify-otp', async (req, res) => {
         setRefreshCookie(res, refresh);
          console.log("access: ",access)
         res.cookie('access', access, {
-            httpOnly: false,                     // prevent JS access
+            httpOnly: true,                     // prevent JS access
             sameSite: 'none',                    // allow sending with same-site requests
-            secure: false,                       // ❌ set false in dev
+            secure: true,                       // ❌ set false in dev
             maxAge: 1000 * 60 * 15,             // 15 minutes
         });
 
