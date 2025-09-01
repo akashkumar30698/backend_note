@@ -91,7 +91,7 @@ router.post('/verify-otp', async (req, res) => {
         const refresh = signRefreshToken(payload);
         setRefreshCookie(res, refresh);
         console.log("access: ", access)
-        res.cookie('access', access, {
+        res.cookies('access', access, {
             httpOnly: true,                     // prevent JS access
             sameSite: 'none',                    // allow sending with same-site requests
             secure: true,                       // ❌ set false in dev

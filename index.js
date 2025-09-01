@@ -2,12 +2,11 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import helmet from 'helmet';
 
 import { connectDB } from './config/db.js';
 import authRoutes from './routes/auth.js';
 import notesRoutes from './routes/notes.js';
-import { otpLimiter, generalLimiter } from './middlewares/rateLimit.js';
+import { generalLimiter } from './middlewares/rateLimit.js';
 
 dotenv.config();
 await connectDB();
@@ -18,7 +17,6 @@ const app = express();
 app.set('trust proxy', 1);
 
 
-app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: 'https://project-eta-mocha-53.vercel.app', credentials: true }));
