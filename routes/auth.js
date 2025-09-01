@@ -91,12 +91,17 @@ router.post('/verify-otp', async (req, res) => {
         const refresh = signRefreshToken(payload);
         setRefreshCookie(res, refresh);
         console.log("access: ", access)
-        res.cookies('access', access, {
-            httpOnly: true,                     // prevent JS access
-            sameSite: 'none',                    // allow sending with same-site requests
-            secure: true,                       // ❌ set false in dev
-            maxAge: 1000 * 60 * 15,             // 15 minutes
-        });
+        
+        const options = {
+            httpOnly: JSON.parse("true"), // Defaults to true
+            secure: JSON.parse("false"), // Should be true in production (HTTPS)
+            sameSite: "None", // Required for cross-origin cookies
+            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in milliseconds
+        };
+
+        // Set cookie
+        res.cookie("accessToken", accessToken, options);
+
 
         return res.json({ message: 'Logged in', user: { id: user._id, email: user.email, name: user.name } });
     } catch (e) {
