@@ -13,6 +13,11 @@ dotenv.config();
 await connectDB();
 
 const app = express();
+
+// ✅ Trust first proxy (needed for secure cookies behind Render, Vercel, etc.)
+app.set('trust proxy', 1);
+
+
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());

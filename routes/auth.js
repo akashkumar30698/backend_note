@@ -90,7 +90,7 @@ router.post('/verify-otp', async (req, res) => {
         const access = signAccessToken(payload);
         const refresh = signRefreshToken(payload);
         setRefreshCookie(res, refresh);
-         console.log("access: ",access)
+        console.log("access: ", access)
         res.cookie('access', access, {
             httpOnly: true,                     // prevent JS access
             sameSite: 'none',                    // allow sending with same-site requests
@@ -108,17 +108,44 @@ router.post('/verify-otp', async (req, res) => {
 
 // Check if access cookie is valid
 router.get("/check", (req, res) => {
-  const token = req.cookies?.access;
-  console.log("ye le token : ",token)
+    const token = req.cookies?.access;
+    console.log("ye le token : ", token)
 
-  if (!token) return res.json({ loggedIn: false });
+    if (!token) return res.json({ loggedIn: false });
 
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
-    return res.json({ loggedIn: true, email: decoded.email });
-  } catch (err) {
-    return res.json({ loggedIn: false });
-  }
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+        return res.json({ loggedIn: true, email: decoded.email });
+    } catch (err) {
+        return res.json({ loggedIn: false });
+    }
+});
+
+
+router.get("/user", async (req, res) => {
+    try {
+        const token = req.cookies?.access; // get token from cookie
+        if (!token) {
+            return res.status(401).json({ loggedIn: false, message: "No token found" });
+        }
+
+        // verify token
+        const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+        const userId = decoded.id; // we stored { id: user._id } when signing
+
+        // find user
+        const user = await User.findById(userId).select("-__v -tokenVersion");
+        if (!user) {
+            return res.status(404).json({ loggedIn: false, message: "User not found" });
+        }
+
+        return res.json(
+            user
+        );
+    } catch (error) {
+        console.error("some error occured: ", error);
+        return res.json({ loggedIn: false });
+    }
 });
 
 
