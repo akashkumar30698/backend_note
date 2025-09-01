@@ -91,7 +91,7 @@ router.post('/verify-otp', async (req, res) => {
         const refresh = signRefreshToken(payload);
         setRefreshCookie(res, refresh);
         console.log("access: ", access)
-        
+
         const options = {
             httpOnly: JSON.parse("true"), // Defaults to true
             secure: JSON.parse("false"), // Should be true in production (HTTPS)
@@ -100,10 +100,10 @@ router.post('/verify-otp', async (req, res) => {
         };
 
         // Set cookie
-        res.cookie("accessToken", accessToken, options);
+        res.cookie("accessToken", access, options);
 
 
-        return res.json({ message: 'Logged in', user: { id: user._id, email: user.email, name: user.name } });
+        return res.json({ message: 'Logged in', user: { id: user._id, email: user.email, name: user.name } ,accessToken:access});
     } catch (e) {
         console.error(e);
         return res.status(500).json({ message: 'Verification failed' });
