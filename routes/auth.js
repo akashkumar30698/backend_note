@@ -94,7 +94,7 @@ router.post('/verify-otp', async (req, res) => {
 
         const options = {
             httpOnly: JSON.parse("true"), // Defaults to true
-            secure: JSON.parse("false"), // Should be true in production (HTTPS)
+            secure: JSON.parse("true"), // Should be true in production (HTTPS)
             sameSite: "None", // Required for cross-origin cookies
             maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in milliseconds
         };
@@ -103,7 +103,7 @@ router.post('/verify-otp', async (req, res) => {
         res.cookie("accessToken", access, options);
 
 
-        return res.json({ message: 'Logged in', user: { id: user._id, email: user.email, name: user.name } ,accessToken:access});
+        return res.json({ message: 'Logged in', user: { id: user._id, email: user.email, name: user.name } });
     } catch (e) {
         console.error(e);
         return res.status(500).json({ message: 'Verification failed' });
